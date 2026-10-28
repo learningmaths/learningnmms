@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NMMS கணிதத் தேர்வு</title>
+
+<style>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 14px;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc, #00c6ff);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+h1 {
+    text-align: center;
+    color: #6a11cb;
+    font-size: 30px;
+}
+
+h2 {
+    color: #e84393;
+}
+
+.question {
+    background: linear-gradient(135deg, #fff1eb, #ace0f9);
+    border: 2px solid #d6c5ff;
+    padding: 18px;
+    margin: 18px 0;
+    border-radius: 16px;
+}
+
+.question p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #25215e;
+}
+
+label {
+    display: block;
+    background: white;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid #ded7ff;
+}
+
+label:hover {
+    background: #e8f4ff;
+}
+
+input[type="radio"] {
+    accent-color: #7b2ff7;
+    margin-right: 8px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    color: white;
+    border: none;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 5px 12px #dd247644;
+}
+
+button:hover {
+    filter: brightness(1.08);
+}
+
+#result {
+    background: #e8fff3;
+    color: #087443;
+    text-align: center;
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+#details p {
+    background: #f3f0ff;
+    padding: 12px;
+    border-radius: 10px;
+    line-height: 1.7;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+</style>
+
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>NMMS கணித மாதிரித் தேர்வு</h1>
+<p>ஒவ்வொரு சரியான விடைக்கும் 1 மதிப்பெண்.</p>
+
+<form id="quiz">
+
+<div class="question">
+<p>1. 12 × 5 = ?</p>
+<label><input type="radio" name="q1" value="a"> 50</label>
+<label><input type="radio" name="q1" value="b"> 60</label>
+<label><input type="radio" name="q1" value="c"> 55</label>
+<label><input type="radio" name="q1" value="d"> 65</label>
+</div>
+
+<div class="question">
+<p>2. 144 இன் வர்க்கமூலம் என்ன?</p>
+<label><input type="radio" name="q2" value="a"> 10</label>
+<label><input type="radio" name="q2" value="b"> 11</label>
+<label><input type="radio" name="q2" value="c"> 12</label>
+<label><input type="radio" name="q2" value="d"> 14</label>
+</div>
+
+<div class="question">
+<p>3. 200 இன் 25% எவ்வளவு?</p>
+<label><input type="radio" name="q3" value="a"> 25</label>
+<label><input type="radio" name="q3" value="b"> 40</label>
+<label><input type="radio" name="q3" value="c"> 75</label>
+<label><input type="radio" name="q3" value="d"> 50</label>
+</div>
+
+<div class="question">
+<p>4. 3, 6, 9, 12, __ அடுத்த எண்?</p>
+<label><input type="radio" name="q4" value="a"> 13</label>
+<label><input type="radio" name="q4" value="b"> 14</label>
+<label><input type="radio" name="q4" value="c"> 15</label>
+<label><input type="radio" name="q4" value="d"> 18</label>
+</div>
+
+<div class="question">
+<p>5. ஒரு சதுரத்தின் பக்கம் 6 செ.மீ. அதன் பரப்பளவு?</p>
+<label><input type="radio" name="q5" value="a"> 12 ச.செ.மீ.</label>
+<label><input type="radio" name="q5" value="b"> 24 ச.செ.மீ.</label>
+<label><input type="radio" name="q5" value="c"> 30 ச.செ.மீ.</label>
+<label><input type="radio" name="q5" value="d"> 36 ச.செ.மீ.</label>
+</div>
+
+<button type="submit">தேர்வு முடிவைப் பார்க்க</button>
+</form>
+
+<div id="result" aria-live="polite"></div>
+<div id="details"></div>
+
+<script>
+const answers = {
+    q1: "b",
+    q2: "c",
+    q3: "d",
+    q4: "c",
+    q5: "d"
+};
+
+const explanations = {
+    q1: "12 × 5 = 60.",
+    q2: "12 × 12 = 144. எனவே வர்க்கமூலம் 12.",
+    q3: "200 × 25 / 100 = 50.",
+    q4: "ஒவ்வொரு முறையும் 3 கூட்டப்படுகிறது. விடை 15.",
+    q5: "சதுரத்தின் பரப்பளவு = பக்கம் × பக்கம் = 6 × 6 = 36."
+};
+
+document.getElementById("quiz").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let score = 0;
+    let report = "";
+
+    for (let i = 1; i <= 5; i++) {
+        const question = "q" + i;
+        const selected = document.querySelector(
+            'input[name="' + question + '"]:checked'
+        );
+
+        if (selected && selected.value === answers[question]) {
+            score++;
+            report += "<p>கேள்வி " + i + ": சரி! " +
+                explanations[question] + "</p>";
+        } else {
+            report += "<p>கேள்வி " + i + ": " +
+                "சரியான விடை: " + answers[question].toUpperCase() +
+                ". " + explanations[question] + "</p>";
+        }
+    }
+
+    document.getElementById("result").textContent =
+        "உங்கள் மதிப்பெண்: " + score + " / 5";
+
+    document.getElementById("details").innerHTML = report;
+});
+</script>
+</div>
+</body>
+</html>
