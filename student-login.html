@@ -34,6 +34,7 @@ a { color: #6a11cb; }
 </style>
 </head>
 <body>
+
 <div class="card">
   <h1>🎓 Student Login</h1>
   <p>மாணவர் உள்நுழைவு</p>
@@ -44,8 +45,8 @@ a { color: #6a11cb; }
       autocomplete="username" required>
 
     <input id="password" type="password"
-      placeholder="Password" autocomplete="current-password"
-      required>
+      placeholder="Password"
+      autocomplete="current-password" required>
 
     <button type="submit">Login / உள்நுழைக</button>
   </form>
@@ -56,7 +57,7 @@ a { color: #6a11cb; }
 
 <script type="module">
 import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth, signInWithEmailAndPassword, signOut
@@ -67,7 +68,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDWGqHPlEN0XhnDGoCeImWbR_eXy7W3aKs",
+  apiKey: "YOUR_EXISTING_FIREBASE_API_KEY",
   authDomain: "learning-maths-cc1fe.firebaseapp.com",
   projectId: "learning-maths-cc1fe",
   storageBucket: "learning-maths-cc1fe.firebasestorage.app",
@@ -95,10 +96,37 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
- message.textContent = JSON.stringify(userDoc.data());
-return;
+  message.textContent = "உள்நுழைகிறது...";
+
+  try {
+    const email = studentId + "@learning.maths.com";
+
+    const credential = await signInWithEmailAndPassword(
+      auth, email, password
+    );
+
+    const userDoc = await getDoc(
+      doc(db, "users", credential.user.uid)
+    );
+
+    if (!userDoc.exists()) {
+      await signOut(auth);
+      message.textContent = "மாணவர் விவரம் Firestore-ல் இல்லை.";
+      return;
+    }
+
+    const data = userDoc.data();
+
+    if (data.role !== "student") {
+      await signOut(auth);
+      message.textContent =
+        "கணக்கின் Role சரியாக இல்லை: " +
+        JSON.stringify(data);
+      return;
+    }
+
     message.textContent =
-      "வணக்கம் " + userDoc.data().name +
+      "வணக்கம் " + data.name +
       "! உள்நுழைவு வெற்றிகரமாக முடிந்தது.";
 
   } catch (error) {
@@ -106,8 +134,9 @@ return;
     message.textContent =
       "பிழை குறியீடு: " + error.code +
       " | " + error.message;
-}
+  }
 });
 </script>
+
 </body>
 </html>
