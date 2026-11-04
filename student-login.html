@@ -95,25 +95,8 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  message.textContent = "உள்நுழைகிறது...";
-
-  try {
-    const email = studentId + "@learning.maths.com";
-
-    const credential = await signInWithEmailAndPassword(
-      auth, email, password
-    );
-
-    const userDoc = await getDoc(
-      doc(db, "users", credential.user.uid)
-    );
-
-    message.textContent =
-  "Login UID: " + credential.user.uid +
-  " | Document: " + userDoc.exists() +
-  " | Role: " + (userDoc.exists() ? userDoc.data().role : "கிடைக்கவில்லை");
+ message.textContent = JSON.stringify(userDoc.data());
 return;
-
     message.textContent =
       "வணக்கம் " + userDoc.data().name +
       "! உள்நுழைவு வெற்றிகரமாக முடிந்தது.";
