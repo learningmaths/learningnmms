@@ -121,8 +121,9 @@ form.addEventListener("submit", async (event) => {
   } catch (error) {
     console.error(error);
     message.textContent =
-      "Student ID அல்லது Password தவறாக உள்ளது. மீண்டும் முயற்சிக்கவும்.";
-  }
+      "பிழை குறியீடு: " + error.code +
+      " | " + error.message;
+}
 });
 </script>
 </body>
