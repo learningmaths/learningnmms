@@ -108,11 +108,11 @@ form.addEventListener("submit", async (event) => {
       doc(db, "users", credential.user.uid)
     );
 
-    if (!userDoc.exists() || userDoc.data().role !== "student") {
-      await signOut(auth);
-      message.textContent = "இந்தக் கணக்கு மாணவர் கணக்கு அல்ல.";
-      return;
-    }
+    message.textContent =
+  "Login UID: " + credential.user.uid +
+  " | Document: " + userDoc.exists() +
+  " | Role: " + (userDoc.exists() ? userDoc.data().role : "கிடைக்கவில்லை");
+return;
 
     message.textContent =
       "வணக்கம் " + userDoc.data().name +
