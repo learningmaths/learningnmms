@@ -125,9 +125,7 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    message.textContent =
-      "வணக்கம் " + data.name +
-      "! உள்நுழைவு வெற்றிகரமாக முடிந்தது.";
+   window.location.href = "student-dashboard.html";
 
   } catch (error) {
     console.error(error);
