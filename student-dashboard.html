@@ -134,10 +134,11 @@ onAuthStateChanged(auth, async (user) => {
     const data = userDoc.data();
 
     studentInfo.innerHTML = `
-      <strong>பெயர்:</strong> ${safe(data.name)}<br>
-      <strong>மாணவர் ID:</strong> ${safe(data.studentid || data.studentId)}<br>
-      <strong>வகுப்பு:</strong> ${safe(data.class)}<br>
-      <strong>பிரிவு:</strong> ${safe(data.section)}
+  <strong>பெயர்:</strong> ${safe(data.name)} ;
+  <strong>மாணவர் ID:</strong> ${safe(data.studentid || data.studentId)} ;
+  <strong>வகுப்பு:</strong> ${safe(data.class)} ;
+  <strong>பிரிவு:</strong> ${safe(data.section)}
+`;
     `;
 
   } catch (error) {
