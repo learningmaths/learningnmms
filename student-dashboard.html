@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>மாணவர் முகப்பு - NMMS</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.header {
+  background: linear-gradient(135deg,#6a11cb,#2575fc);
+  color: white;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  margin-top: 20px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px #0001;
+}
+
+h2 { color: #6a11cb; }
+
+.info {
+  line-height: 2;
+  font-size: 17px;
+}
+
+button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #dc2626;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#message {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>🎓 NMMS மாணவர் முகப்பு</h1>
+  <p>வணக்கம்! கற்றலைத் தொடருங்கள்.</p>
+</div>
+
+<div class="card">
+  <h2>👨‍🎓 எனது விவரங்கள்</h2>
+  <div class="info" id="studentInfo">
+    விவரங்கள் ஏற்றப்படுகின்றன...
+  </div>
+</div>
+
+<div class="card">
+  <h2>📚 எனது தேர்வுகள்</h2>
+  <p>விரைவில் இங்கே NMMS MAT மற்றும் SAT தேர்வுகள் இடம்பெறும்.</p>
+</div>
+
+<div class="card">
+  <h2>🏆 எனது மதிப்பெண்கள்</h2>
+  <p>தேர்வு எழுதிய பிறகு உங்கள் மதிப்பெண்களை இங்கே பார்க்கலாம்.</p>
+</div>
+
+<p id="message"></p>
+
+<div style="text-align:center;margin-top:25px">
+  <button id="logoutBtn">Logout / வெளியேறு</button>
+</div>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore, doc, getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDWGqHPlEN0XhnDGoCeImWbR_eXy7W3aKs",
+  authDomain: "learning-maths-cc1fe.firebaseapp.com",
+  projectId: "learning-maths-cc1fe",
+  storageBucket: "learning-maths-cc1fe.firebasestorage.app",
+  messagingSenderId: "577761460955",
+  appId: "1:577761460955:web:76ca50a764f905862742fe",
+  measurementId: "G-KP391PKX3R"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const studentInfo = document.getElementById("studentInfo");
+const message = document.getElementById("message");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "student-login.html";
+    return;
+  }
+
+  try {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (!userDoc.exists() || userDoc.data().role !== "student") {
+      await signOut(auth);
+      window.location.href = "student-login.html";
+      return;
+    }
+
+    const data = userDoc.data();
+
+    studentInfo.innerHTML = `
+      <strong>பெயர்:</strong> ${safe(data.name)}<br>
+      <strong>மாணவர் ID:</strong> ${safe(data.studentid || data.studentId)}<br>
+      <strong>வகுப்பு:</strong> ${safe(data.class)}<br>
+      <strong>பிரிவு:</strong> ${safe(data.section)}
+    `;
+
+  } catch (error) {
+    console.error(error);
+    message.textContent = "விவரங்களைப் பெற முடியவில்லை: " + error.message;
+  }
+});
+
+function safe(value) {
+  const div = document.createElement("div");
+  div.textContent = value ?? "";
+  return div.innerHTML;
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "student-login.html";
+});
+</script>
+
+</body>
+</html>
